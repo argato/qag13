@@ -4,8 +4,7 @@ import org.aeonbits.owner.Config;
 
 @Config.LoadPolicy(Config.LoadType.MERGE)
 @Config.Sources({"system:properties",
-    "classpath:config/${environment}.properties",
-    "classpath:config/remote.properties"})
+    "classpath:config/${environment}.properties"})
 public interface DriverConfig extends Config {
 
   @Key("webdriver.user")
@@ -15,7 +14,7 @@ public interface DriverConfig extends Config {
   String remoteWebPassword();
 
   @Key("webdriver.browser")
-  String webDriveBrowser();
+  String webDriverBrowser();
 
   @Key("webdriver.browser.version")
   String webDriveBrowserVersion();

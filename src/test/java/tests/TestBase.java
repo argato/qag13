@@ -18,30 +18,30 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class TestBase {
 
-  static DriverConfig driverConfig = ConfigFactory.create(DriverConfig.class);
+  static DriverConfig driverConfig = ConfigFactory.create(DriverConfig.class,
+                                                          System.getProperties());
 
   @BeforeAll
   static void setup() {
     addListener("AllureSelenide", new AllureSelenide());
+    if (System.getProperty("environment") == null) {
+      System.setProperty("environment", "remote");
+    }
+
     DesiredCapabilities capabilities = new DesiredCapabilities();
     capabilities.setCapability("enableVNC", true);
     capabilities.setCapability("enableVideo", true);
     Configuration.browserCapabilities = capabilities;
-    Configuration.browser = driverConfig.webDriveBrowser();
+    Configuration.browser = driverConfig.webDriverBrowser();
     Configuration.browserVersion = driverConfig.webDriveBrowserVersion();
     Configuration.startMaximized = driverConfig.webDriverMaximized();
 
     String remoteWebDriver = driverConfig.webDriverUrl();
-
-    String user = driverConfig.remoteWebUser();
-    String password = driverConfig.remoteWebPassword();
-
-    if (user != null & password != null) {
-
+    if (remoteWebDriver != null) {
+      String user = driverConfig.remoteWebUser();
+      String password = driverConfig.remoteWebPassword();
       Configuration.remote = String.format("https://%s:%s@%s/wd/hub", user, password,
                                            remoteWebDriver);
-    } else {
-      Configuration.remote = String.format("https://%s/wd/hub", remoteWebDriver);
     }
   }
 
